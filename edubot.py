@@ -135,7 +135,7 @@ class EduBot:
     def __heartbeadThread(self):
         """ поток отправляющий сердцебиение """
         while not self.__exit:
-            self._bus.write_byte_data(self._addr, Registers.REG_HEARTBEAD, 1)
+            self._bus.write_byte_data(self._addr, Registers.REG_HEARTBEAT, 1)
             time.sleep(1)
 
     def __buttonThread(self):
