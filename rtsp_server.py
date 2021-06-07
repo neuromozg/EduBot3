@@ -38,7 +38,6 @@ class CamFactory(GstRtspServer.RTSPMediaFactory):
 class Server():
 	def __init__(self):
 		self.Server = GstRtspServer.RTSPServer.new()
-		self.Server.set_service('5554')
 
 		Cam = CamFactory()
 		Cam.set_shared(True)
@@ -49,7 +48,7 @@ class Server():
 		self.Server.attach(None)
 
 		portServer = self.Server.get_bound_port()
-		print('RTSP server started: rtsp://%s:%d/front' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
+		print('RTSP server started: rtsp://%s:%d/edubot' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
 
 		
 if __name__ == '__main__':
