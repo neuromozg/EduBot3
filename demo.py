@@ -1,0 +1,49 @@
+import threading
+import smbus
+import time
+from edubot import EduBot, MotorMode, Direction, Registers
+
+""" Перед запуском поставить робота на ровную поверхность, тк он начнет движение вперед! """
+
+# Функция срабатывающая по нажатию кнопки на роботе
+def button():
+    print("Кнопка нажата")
+
+if __name__ == "__main__":
+    # инициализация робота и его моторов
+    bus = smbus.SMBus(1)
+    bot = EduBot(bus)
+    bot.onButton = button
+    bot.start()
+    print(bot.whoIam())
+    bot.setMotorMode(MotorMode.MOTOR_MODE_PID)
+
+    # движение вперед в течении 3 секунд
+    bot.setParrot0(-45)
+    bot.setParrot1(45)
+    time.sleep(3)
+
+    # Поворот в течении 2 секунд
+    bot.setParrot0(30)
+    bot.setParrot1(30)
+    time.sleep(2)
+
+    # Поворот в течении 2 секунд
+    bot.setParrot0(-30)
+    bot.setParrot1(-30)
+    time.sleep(2)
+
+    # остановка моторов
+    bot.setParrot0(0)
+    bot.setParrot1(0)
+    time.sleep(1)
+
+    # Движение камеры
+    for i in range(0, 200, 8):
+        bot.setServo0(i)
+        time.sleep(0.1)
+
+    # начальное положение сервы
+    bot.setServo0(120)
+    time.sleep(5)
+    bot.exit()
