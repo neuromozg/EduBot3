@@ -59,7 +59,7 @@ def TextDisplay(text):
     
 
 bus = smbus.SMBus(1)
-robot = EduBot(bus)
+robot = edubot.EduBot(bus)
 assert robot.check(), 'EduBot not found!!!'
 print('EduBot shield found')
 
@@ -70,7 +70,7 @@ print('EduBot shield found')
 robot.start() #обязательная процедура, запуск потока отправляющего на контроллер EduBot онлайн сообщений
 print ('EduBot started!!!')
 
-robot.setMotorMode(MotorMode.MOTOR_MODE_PWM)
+robot.setMotorMode(edubot.MotorMode.MOTOR_MODE_PWM)
 
 image = Image.new('1', robot.displaySize) #создаем ч/б картинку для отрисовки на дисплее
 draw = ImageDraw.Draw(image) #создаем объект для рисования на картинке
