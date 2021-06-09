@@ -6,6 +6,7 @@ import os
 import pickle
 import sys
 import crc16
+import smbus
 
 #библиотеки для работы с изображениями Python Image Library
 from PIL import Image
