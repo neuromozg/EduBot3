@@ -86,7 +86,7 @@ print("Listening %s on port %d..." % (IP, PORT))
 countPacket = 0
 userIP = ''
 
-TextDisplay('EduBot')
+#TextDisplay('EduBot')
 
 servoPos = SERVO_MED_POS
 
