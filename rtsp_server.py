@@ -24,33 +24,33 @@ def getIP():
 
 # функция для формирования пайплайна
 class CamFactory(GstRtspServer.RTSPMediaFactory):
-        def __init__(self):
-                GstRtspServer.RTSPMediaFactory.__init__(self)
+    def __init__(self):
+        GstRtspServer.RTSPMediaFactory.__init__(self)
 
-        def do_create_element(self, url):
-                pipeline_str = "( v4l2src device=/dev/video0 ! video/x-raw, width=640, height=480 ! v4l2h264enc ! rtph264pay name=pay0 pt=96 )"
-                print(pipeline_str)
-                return Gst.parse_launch(pipeline_str)
+    def do_create_element(self, url):
+        pipeline_str = "( v4l2src device=/dev/video0 ! video/x-raw, width=640, height=480 ! v4l2h264enc ! rtph264pay name=pay0 pt=96 )"
+        print(pipeline_str)
+        return Gst.parse_launch(pipeline_str)
 
 
 
 # класс сервера
 class Server():
-	def __init__(self):
-		self.Server = GstRtspServer.RTSPServer.new()
+    def __init__(self):
+	self.Server = GstRtspServer.RTSPServer.new()
 
-		Cam = CamFactory()
-		Cam.set_shared(True)
+	Cam = CamFactory()
+	Cam.set_shared(True)
 
-		m = self.Server.get_mount_points()
-		m.add_factory("/edubot", Cam)
+	m = self.Server.get_mount_points()
+	m.add_factory("/edubot", Cam)
 
-		self.Server.attach(None)
+	self.Server.attach(None)
 
-		portServer = self.Server.get_bound_port()
-		print('RTSP server started: rtsp://%s:%d/edubot' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
+	portServer = self.Server.get_bound_port()
+	print('RTSP server started: rtsp://%s:%d/edubot' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
 
 		
 if __name__ == '__main__':
-	server = Server() # инициализация сервера
-	loop.run()
+    server = Server() # инициализация сервера
+    loop.run()

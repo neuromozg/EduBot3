@@ -3,6 +3,9 @@ import smbus
 import time
 
 _ADC_TO_VOLTAGE_RATE = 1.1/256*11  # коэфф для перевода едениц АЦП в вольты
+_SERVO_MIN_POS = 0
+_SERVO_MED_POS = 64
+_SERVO_MAX_POS = 125
 
 try:
     import Adafruit_SSD1306  # sudo pip3 install Adafruit-SSD1306
@@ -62,7 +65,7 @@ class EduBot:
         return self._bus.read_byte_data(self._addr, Registers.REG_WHY_IAM)
 
     def check(self):
-        return
+        return self.whoIam() == 42
 
     def setMotorMode(self, mode):
         """ Устанавливает режим работы драйвера """
@@ -120,12 +123,12 @@ class EduBot:
 
     def setServo0(self, pos):
         """ Установка позиции 0 сервы """
-        pos = min(max(0, pos), 250)  # проверяем значение pos
+        pos = min(max(_SERVO_MIN_POS, pos), _SERVO_MAX_POS)  # проверяем значение pos
         self._bus.write_byte_data(self._addr, Registers.REG_SERVO_0, pos)
 
     def setServo1(self, pos):
         """ Установка позиции 1 сервы """
-        pos = min(max(0, pos), 250)  # проверяем значение pos
+        pos = min(max(_SERVO_MIN_POS, pos), _SERVO_MAX_POS)  # проверяем значение pos
         self._bus.write_byte_data(self._addr, Registers.REG_SERVO_1, pos)
 
     def beep(self):
