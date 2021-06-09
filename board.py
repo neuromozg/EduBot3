@@ -33,8 +33,8 @@ RTP_PORT = 8554 #порт отправки RTP видео
 oldText = '' #переменная для отрисовки текста на дисплее
 
 def SetSpeed(leftSpeed, rightSpeed):
-    robot.leftMotor.SetSpeed(leftSpeed)
-    robot.rightMotor.SetSpeed(rightSpeed)
+    robot.setPwm0(leftSpeed)
+    robot.setPwm1(rightSpeed)
 
 def SetCameraServoPos(position):
     #нормализация значения
@@ -72,11 +72,11 @@ print ('EduBot started!!!')
 
 robot.setMotorMode(edubot.MotorMode.MOTOR_MODE_PWM)
 
-image = Image.new('1', robot.displaySize) #создаем ч/б картинку для отрисовки на дисплее
-draw = ImageDraw.Draw(image) #создаем объект для рисования на картинке
+#image = Image.new('1', robot.displaySize) #создаем ч/б картинку для отрисовки на дисплее
+#draw = ImageDraw.Draw(image) #создаем объект для рисования на картинке
 #font = ImageFont.load_default() #создаем шрифт для отрисовки текста на картинке
-fontFile = 'DejaVuSerif.ttf'
-font = ImageFont.truetype(fontFile, 15) #создаем шрифт для отрисовки текста на картинке
+#fontFile = 'DejaVuSerif.ttf'
+#font = ImageFont.truetype(fontFile, 15) #создаем шрифт для отрисовки текста на картинке
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #создаем UDP server
 server.bind((IP, PORT)) #запускаем сервер
@@ -87,6 +87,8 @@ countPacket = 0
 userIP = ''
 
 TextDisplay('EduBot')
+
+servoPos = SERVO_MED_POS
 
 while True:
     try:
@@ -114,10 +116,13 @@ while True:
             if crc == newCrc:
                 leftSpeed, rightSpeed, servoMove, beep, automat = pickle.loads(stateMoveBytes)
  
+                servoPos += servoMove
+                servoPos = min(max(SERVO_MIN_POS, servoPos), SERVO_MAX_POS)  # нормализуем значение
+                
                 SetSpeed(leftSpeed, rightSpeed) #задаем скорости
                 SetCameraServoPos(servoPos) #задаем положение серво
 
-                TextDisplay(text) #отрисовываем текcт на дисплее
+                #TextDisplay(text) #отрисовываем текcт на дисплее
 
             else:
                 print('%d Error CRC packet' % countPacket)

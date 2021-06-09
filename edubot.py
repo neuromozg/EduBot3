@@ -97,16 +97,22 @@ class EduBot:
             self._setDirection1(Direction.BACKWARD)
         self._bus.write_byte_data(self._addr, Registers.REG_PARROT_1, abs(parrot))
 
-    def setPwm0(self, direction, pwm):
+    def setPwm0(self, pwm):
         """ Устанавливает скорость через параметры шима """
         pwm = min(max(-255, pwm), 255)  # проверяем значение pwm
-        self._setDirection0(direction)
+        if pwm < 0:
+            self._setDirection1(Direction.FORWARD)
+        else:
+            self._setDirection1(Direction.BACKWARD)
         self._bus.write_byte_data(self._addr, Registers.REG_PWM_0, abs(pwm))
 
-    def setPwm1(self, direction, pwm):
+    def setPwm1(self, pwm):
         """ Устанавливает скорость через параметры шима """
         pwm = min(max(-255, pwm), 255)  # проверяем значение pwm
-        self._setDirection1(direction)
+        if pwm < 0:
+            self._setDirection1(Direction.FORWARD)
+        else:
+            self._setDirection1(Direction.BACKWARD)
         self._bus.write_byte_data(self._addr, Registers.REG_PWM_1, abs(pwm))
 
     def setKp(self, kp):
