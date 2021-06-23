@@ -8,6 +8,10 @@ import crc16
 import sys
 import numpy as np
 import cv2
+import gi
+
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst, GLib
 
 SPEED = 150
 IP_ROBOT = '10.10.16.100'
@@ -17,6 +21,11 @@ RTSP_PORT = 8554
 FPS = 10  # количество кадров в секунду у окна Pygame
 WIDTH = 640
 HEIGHT = 360
+
+PIPELINE = 'rtspsrc location=rtsp://{}:{}/front latency=100 drop-on-latency=true buffer-mode=0 ! \
+rtph264depay ! avdec_h264 ! videoconvert ! appsink emit-signals=true'.format(IP_ROBOT, RTSP_PORT)
+
+print(PIPELINE)
 
 #фунция вызываемая при получении кадра с камеры робота
 def onFrameCallback(data, width, height):
@@ -41,6 +50,9 @@ font = pygame.font.Font(None, 26) #создали шрифт
 
 #создаем UDP клиента
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+#создаем прием видоео
+
 
 #основной цикл работы программы
 while running:
