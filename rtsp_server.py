@@ -19,8 +19,8 @@ Gst.init(None)
 
 # Функция для получения IP робота
 def getIP():
-        res = os.popen('hostname -I | cut -d\' \' -f1').readline().replace('\n','') #получаем IP, удаляем \n
-        return res
+    res = os.popen('hostname -I | cut -d\' \' -f1').readline().replace('\n','') #получаем IP, удаляем \n
+    return res
 
 # функция для формирования пайплайна
 class CamFactory(GstRtspServer.RTSPMediaFactory):
@@ -37,18 +37,17 @@ class CamFactory(GstRtspServer.RTSPMediaFactory):
 # класс сервера
 class Server():
     def __init__(self):
-	self.Server = GstRtspServer.RTSPServer.new()
+        self.Server = GstRtspServer.RTSPServer.new()
+        Cam = CamFactory()
+        Cam.set_shared(True)
 
-	Cam = CamFactory()
-	Cam.set_shared(True)
+        m = self.Server.get_mount_points()
+        m.add_factory("/edubot", Cam)
 
-	m = self.Server.get_mount_points()
-	m.add_factory("/edubot", Cam)
+        self.Server.attach(None)
 
-	self.Server.attach(None)
-
-	portServer = self.Server.get_bound_port()
-	print('RTSP server started: rtsp://%s:%d/edubot' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
+        portServer = self.Server.get_bound_port()
+        print('RTSP server started: rtsp://%s:%d/front' % (getIP(), portServer)) # Вывод ссылки для подключения к серверу
 
 		
 if __name__ == '__main__':

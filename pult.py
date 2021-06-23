@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 
 SPEED = 150
-IP_ROBOT = '10.10.16.164'
+IP_ROBOT = '10.10.16.100'
 PORT = 8000
 RTSP_PORT = 8554
 
